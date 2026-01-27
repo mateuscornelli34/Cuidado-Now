@@ -1,5 +1,5 @@
 /**
- * MindCare AI - Tela de Emergência
+ * Cuidado-Now AI - Tela de Emergência
  * Contatos de emergência, recursos de ajuda e suporte em crise
  */
 

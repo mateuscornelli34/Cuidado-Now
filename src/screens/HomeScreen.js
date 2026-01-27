@@ -1,5 +1,5 @@
 /**
- * MindCare AI - Tela Principal
+ * Cuidado-Now AI - Tela Principal
  * Painel inicial com saudação personalizada e acesso rápido às funções
  */
 
@@ -410,7 +410,7 @@ export default function HomeScreen({ navigation }) {
                 >
                     <View style={styles.websiteLinkContent}>
                         <Ionicons name="globe-outline" size={24} color={themeColors.primary.main} />
-                        <Text style={styles.websiteLinkText}>Acesse o site oficial Lumina AI</Text>
+                        <Text style={styles.websiteLinkText}>Acesse o site oficial Cuidado-Now</Text>
                     </View>
                     <Ionicons name="arrow-forward" size={20} color={themeColors.primary.main} />
                 </TouchableOpacity>

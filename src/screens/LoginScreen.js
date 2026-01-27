@@ -1,5 +1,5 @@
 /**
- * MindCare AI - Tela de Login
+ * Cuidado-Now AI - Tela de Login
  * Autenticação segura compatível com Web e Mobile
  */
 
@@ -66,7 +66,7 @@ export default function LoginScreen({ navigation }) {
                     <View style={styles.logoContainer}>
                         <Ionicons name="heart" size={48} color={colors.primary.main} />
                     </View>
-                    <Text style={styles.title}>MindCare AI</Text>
+                    <Text style={styles.title}>Cuidado-Now AI</Text>
                     <Text style={styles.subtitle}>Seu espaço seguro de escuta e apoio.</Text>
                 </View>
 

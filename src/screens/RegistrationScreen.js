@@ -1,5 +1,5 @@
 /**
- * Lumina AI - Tela de Registro/Cadastro
+ * Cuidado-Now - Tela de Registro/Cadastro
  * Coleta de dados essenciais para personalização e segurança
  */
 

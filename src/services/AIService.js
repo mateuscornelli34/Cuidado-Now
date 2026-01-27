@@ -1,5 +1,5 @@
 /**
- * Lumina AI - Serviço de Inteligência Artificial
+ * Cuidado-Now - Serviço de Inteligência Artificial
  * Gerencia interações empáticas e análise de sentimento com abordagens terapêuticas
  */
 
@@ -124,7 +124,7 @@ const KNOWLEDGE_BASES = {
         ],
         responses: [
             'Olá. Estou aqui. Sobre o que você quer falar hoje? Posso discutir desde seus sentimentos até fatos do mundo.',
-            'Sou o MindCare. Uma inteligência focada em você, mas aberta a qualquer diálogo. O que te traz aqui?',
+            'Sou o Cuidado-Now. Uma inteligência focada em você, mas aberta a qualquer diálogo. O que te traz aqui?',
             'Estou ouvindo. Pode ser um desabafo ou uma dúvida qualquer. O espaço é seu.',
             'Às vezes, conversar sobre coisas aleatórias também ajuda a organizar a mente. O que você me diz?',
             'Seja qual for o assunto - dor, alegria, política ou ciência - estou pronto para ouvir e responder.',
@@ -443,7 +443,7 @@ class AIService {
             const { GoogleGenerativeAI } = require('@google/generative-ai');
             this.apiKey = apiKey; // Save API Key for reconfiguration
             this.genAI = new GoogleGenerativeAI(apiKey);
-            let systemRole = `Você é o MindCare.
+            let systemRole = `Você é o Cuidado-Now.
                         
                         SUA POSTURA:
                         - Sóbria, atenta, curiosa e ASSERTIVA.

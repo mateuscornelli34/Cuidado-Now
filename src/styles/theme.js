@@ -1,5 +1,5 @@
 /**
- * MindCare AI - Sistema de Temas
+ * Cuidado-Now AI - Sistema de Temas
  * Cores calmantes e acolhedoras para promover bem-estar
  * Tema claro e escuro com paleta relaxante
  */

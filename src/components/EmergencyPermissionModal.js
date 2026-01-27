@@ -20,7 +20,7 @@ const EmergencyPermissionModal = ({ visible, onConfirm, onDeny }) => {
                     <Text style={styles.title}>Sua segurança em primeiro lugar</Text>
 
                     <Text style={styles.description}>
-                        O MindCare AI monitora situações de risco eminente. Você permite que a IA inicie uma ligação para seus contatos de emergência caso perceba que você está em perigo?
+                        O Cuidado-Now AI monitora situações de risco eminente. Você permite que a IA inicie uma ligação para seus contatos de emergência caso perceba que você está em perigo?
                     </Text>
 
                     <View style={styles.noteContainer}>

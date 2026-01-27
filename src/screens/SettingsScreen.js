@@ -1,5 +1,5 @@
 /**
- * MindCare AI - Tela de Configurações
+ * Cuidado-Now AI - Tela de Configurações
  * Preferências do usuário, notificações e icones de emergência
  */
 
@@ -638,7 +638,7 @@ export default function SettingsScreen({ navigation, route }) {
                     <SettingItem
                         icon="shield"
                         title="Redução de Danos"
-                        subtitle="Pilar do cuidado Lumina"
+                        subtitle="Pilar do cuidado Cuidado Now"
                         color="#B8D4E3"
                         themeColors={themeColors}
                         styles={styles}
@@ -651,7 +651,7 @@ export default function SettingsScreen({ navigation, route }) {
                 <View style={styles.section}>
                     <SettingItem
                         icon="heart"
-                        title="Lumina AI"
+                        title="Cuidado-Now"
                         subtitle="Versão 1.2.0"
                         color="#E74C3C"
                         themeColors={themeColors}

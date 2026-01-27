@@ -1,5 +1,5 @@
 /**
- * MindCare AI - Serviço de Emergência
+ * Cuidado-Now AI - Serviço de Emergência
  * Gerencia detecção de crise e contatos de emergência
  */
 

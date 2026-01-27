@@ -1,5 +1,5 @@
 /**
- * Lumina AI - Tela de Suporte
+ * Cuidado-Now - Tela de Suporte
  * Redireciona para WhatsApp para suporte humano
  */
 
@@ -17,7 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing, borderRadius, shadows, typography } from '../styles/theme';
 
 const WHATSAPP_NUMBER = '5545999078628'; // Número formatado para WhatsApp API
-const WHATSAPP_MESSAGE = 'Olá! Preciso de suporte com o app Lumina AI.';
+const WHATSAPP_MESSAGE = 'Olá! Preciso de suporte com o app Cuidado-Now.';
 
 export default function SupportScreen({ navigation }) {
     const handleWhatsAppRedirect = () => {

@@ -1,5 +1,5 @@
 /**
- * MindCare AI - Tela de Conversa
+ * Cuidado-Now AI - Tela de Conversa
  * Interface de chat empática com respostas de apoio emocional
  */
 
@@ -584,7 +584,7 @@ export default function ChatScreen({ navigation, route }) {
                         <Ionicons name="heart" size={20} color={themeColors.surface} />
                     </View>
                     <View>
-                        <Text style={styles.headerTitle}>Lumina</Text>
+                        <Text style={styles.headerTitle}>Cuidado Now</Text>
                         <Text style={styles.headerSubtitle}>Sempre aqui para você</Text>
                     </View>
                 </View>
