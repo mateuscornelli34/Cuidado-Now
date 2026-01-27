@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "Lumina AI",
+    "slug": "lumina-ai",
+    "scheme": "lumina-ai",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#4A90A4"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lumina.ai",
+      "infoPlist": {
+        "NSContactsUsageDescription": "Precisamos acessar seus contatos para adicionar contatos de emergência.",
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#4A90A4"
+      },
+      "package": "com.lumina.ai",
+      "permissions": [
+        "CALL_PHONE",
+        "READ_CONTACTS",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "name": "Lumina AI",
+      "shortName": "Lumina",
+      "lang": "pt-BR",
+      "themeColor": "#4A90A4",
+      "backgroundColor": "#F5F7FA",
+      "display": "standalone",
+      "description": "Seu assistente de bem-estar emocional e inteligência psicológica."
+    },
+    "plugins": [
+      "expo-notifications",
+      "expo-secure-store",
+      "expo-font"
+    ]
+  }
+}

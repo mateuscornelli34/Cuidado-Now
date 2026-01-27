@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- Viewport for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, shrink-to-fit=no, viewport-fit=cover" />
+    
+    <title>Lumina AI - Seu Assistente de Bem-Estar</title>
+    
+    <!-- SEO Meta -->
+    <meta name="description" content="Lumina AI - Seu assistente de bem-estar emocional e inteligência psicológica. Cuidado e apoio quando você precisa." />
+    <meta name="keywords" content="saúde mental, bem-estar, terapia, psicologia, apoio emocional, Lumina AI" />
+    <meta name="author" content="Lumina AI" />
+    
+    <!-- Theme Colors -->
+    <meta name="theme-color" content="#4A90A4" />
+    <meta name="msapplication-navbutton-color" content="#4A90A4" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- PWA - Apple iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Lumina" />
+    <link rel="apple-touch-icon" href="/assets/icon.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="/assets/icon.png" />
+    
+    <!-- PWA - Android/Chrome -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Lumina" />
+    
+    <!-- Microsoft/Windows -->
+    <meta name="msapplication-TileColor" content="#4A90A4" />
+    <meta name="msapplication-config" content="none" />
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    
+    <!-- Prevent phone number detection -->
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Lumina AI - Assistente de Bem-Estar" />
+    <meta property="og:description" content="Seu assistente de bem-estar emocional e inteligência psicológica." />
+    <meta property="og:url" content="https://cuidadonow.web.app" />
+    
+    <!-- Cross-Browser CSS Reset and Optimizations -->
+    <style id="expo-reset">
+      /* Modern CSS Reset */
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      
+      /* Remove default margin and use full height */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      
+      /* Prevent horizontal scroll and enable smooth scroll */
+      html {
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      
+      /* Body optimizations */
+      body {
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        /* Prevent pull-to-refresh on mobile */
+        overscroll-behavior-y: contain;
+        /* Safe area for notched devices */
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      }
+      
+      /* Root element full height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+        flex-direction: column;
+      }
+      
+      /* Touch optimization */
+      button, a, input, textarea, select {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      
+      /* Disable text selection on interactive elements */
+      button {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      
+      /* Input optimizations for iOS */
+      input, textarea {
+        -webkit-appearance: none;
+        appearance: none;
+        border-radius: 0;
+      }
+      
+      /* Scrollbar styling for desktop browsers */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #4A90A4;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #3d7a8a;
+      }
+      
+      /* Focus ring for accessibility */
+      :focus-visible {
+        outline: 2px solid #4A90A4;
+        outline-offset: 2px;
+      }
+      
+      /* Remove focus outline for mouse users */
+      :focus:not(:focus-visible) {
+        outline: none;
+      }
+      
+      /* Responsive typography */
+      @media screen and (max-width: 375px) {
+        html {
+          font-size: 14px;
+        }
+      }
+      
+      @media screen and (min-width: 768px) {
+        html {
+          font-size: 16px;
+        }
+      }
+      
+      @media screen and (min-width: 1200px) {
+        html {
+          font-size: 18px;
+        }
+      }
+      
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        :root {
+          --border-width: 2px;
+        }
+      }
+      
+      /* Reduced motion support */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      
+      /* Print styles */
+      @media print {
+        body {
+          overflow: visible;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <div style="padding: 20px; text-align: center; font-family: sans-serif;">
+        <h1>Lumina AI</h1>
+        <p>Você precisa habilitar JavaScript para usar este aplicativo.</p>
+        <p>Por favor, ative o JavaScript nas configurações do seu navegador.</p>
+      </div>
+    </noscript>
+    <div id="root"></div>
+  </body>
+</html>
