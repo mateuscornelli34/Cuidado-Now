@@ -4,13 +4,15 @@
  * Desenvolvido com React Native e Expo
  */
 
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
+import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
 
 // Importação das telas do aplicativo
 import HomeScreen from './src/screens/HomeScreen';
@@ -24,6 +26,9 @@ import LoginScreen from './src/screens/LoginScreen';
 // Sistema de cores e tema
 import { colors } from './src/styles/theme';
 import { ThemeProvider, useTheme } from './src/context/ThemeContext';
+
+// Previne que o splash screen se esconda automaticamente
+SplashScreen.preventAutoHideAsync();
 
 const Tab = createBottomTabNavigator();
 
@@ -79,8 +84,39 @@ function MainTabs() {
 }
 
 export default function App() {
+    const [appIsReady, setAppIsReady] = useState(false);
+
+    useEffect(() => {
+        async function prepare() {
+            try {
+                // Carrega as fontes dos ícones do Ionicons
+                await Font.loadAsync({
+                    ...Ionicons.font,
+                });
+            } catch (e) {
+                console.warn('Erro ao carregar fontes:', e);
+            } finally {
+                // Indica que o app está pronto
+                setAppIsReady(true);
+            }
+        }
+
+        prepare();
+    }, []);
+
+    const onLayoutRootView = useCallback(async () => {
+        if (appIsReady) {
+            // Esconde o splash screen quando o app estiver pronto
+            await SplashScreen.hideAsync();
+        }
+    }, [appIsReady]);
+
+    if (!appIsReady) {
+        return null;
+    }
+
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
             <ThemeProvider>
                 <SafeAreaProvider>
                     <NavigationContainer>
