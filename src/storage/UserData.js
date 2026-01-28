@@ -1,86 +1,77 @@
 /**
- * MindCare AI - Serviço de Armazenamento de Dados do Usuário
+ * Cuidado-Now AI - Serviço de Armazenamento de Dados do Usuário
  * Gerencia dados locais de forma segura
+ * 
+ * OTIMIZADO: Corrigida duplicação de chave, adicionado cache em memória
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// Chaves de armazenamento
-const STORAGE_KEYS = {
-    USER_PROFILE: '@mindcare_user_profile',
-    EMERGENCY_CONTACTS: '@mindcare_emergency_contacts',
-    MOOD_HISTORY: '@mindcare_mood_history',
-    CHAT_HISTORY: '@mindcare_chat_history',
-    SETTINGS: '@mindcare_settings',
-    ONBOARDING_COMPLETE: '@mindcare_onboarding',
-    ONBOARDING_COMPLETE: '@mindcare_onboarding',
-    API_KEY: '@mindcare_api_key',
-    USER_ID: '@mindcare_user_id',
-};
-
+import {
+    STORAGE_KEYS,
+    LIMITS,
+    DEFAULT_PROFILE,
+    DEFAULT_SETTINGS,
+    PERMANENT_CONTACTS
+} from '../config/constants';
 import firebaseService from '../services/FirebaseService';
-
-// Estrutura padrão do perfil
-const DEFAULT_PROFILE = {
-    firstName: '',
-    lastName: '',
-    phone: '',
-    dateOfBirth: '',
-    emergencyContact: '', // Armazena apenas o número ou nome para referência rápida no perfil
-    createdAt: null,
-    lastCheckIn: null,
-    streak: 0,
-    insights: [], // Summarized insights from previous sessions
-    lastSummaryAt: null,
-    emergencyPermissionGranted: null, // null = not asked, true = granted, false = denied
-};
-
-// Configurações padrão
-const DEFAULT_SETTINGS = {
-    theme: 'auto', // 'light', 'dark', 'auto'
-    therapeuticApproach: 'general', // 'general', 'freud', 'skinner', 'deleuze_guattari', 'foucault', 'poetry'
-    notifications: {
-        enabled: true,
-        morningCheckIn: true,
-        morningTime: '08:00',
-        eveningCheckIn: true,
-        eveningTime: '20:00',
-        reminders: true,
-    },
-    privacy: {
-        saveHistory: true,
-        analyticsEnabled: false,
-    },
-    voice: {
-        enabled: true,
-    },
-    aiFontSize: 16, // Default AI message font size (12-24)
-};
 
 /**
  * Classe para gerenciar dados do usuário
- * Inclui tratamento de erros robusto
+ * Inclui cache em memória para dados frequentes
  */
 class UserDataService {
     constructor() {
+        // Cache em memória
+        this._cache = {
+            profile: null,
+            settings: null,
+            lastCacheUpdate: null,
+        };
+        this._cacheExpiry = 5 * 60 * 1000; // 5 minutos
+
         this.init();
     }
 
     async init() {
-        // Initialize User ID
-        let uid = await AsyncStorage.getItem(STORAGE_KEYS.USER_ID);
-        if (!uid) {
-            uid = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            await AsyncStorage.setItem(STORAGE_KEYS.USER_ID, uid);
-        }
-        firebaseService.setUserId(uid);
+        try {
+            // Inicializa User ID
+            let uid = await AsyncStorage.getItem(STORAGE_KEYS.USER_ID);
+            if (!uid) {
+                uid = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                await AsyncStorage.setItem(STORAGE_KEYS.USER_ID, uid);
+            }
+            firebaseService.setUserId(uid);
 
-        // Try to load firebase config
-        await firebaseService.loadConfig();
+            // Tenta carregar config do Firebase
+            await firebaseService.loadConfig();
+        } catch (error) {
+            console.error('Erro ao inicializar UserData:', error);
+        }
+    }
+
+    /**
+     * Verifica se o cache ainda é válido
+     * @private
+     */
+    _isCacheValid() {
+        if (!this._cache.lastCacheUpdate) return false;
+        return (Date.now() - this._cache.lastCacheUpdate) < this._cacheExpiry;
+    }
+
+    /**
+     * Invalida o cache
+     * @private
+     */
+    _invalidateCache() {
+        this._cache.profile = null;
+        this._cache.settings = null;
+        this._cache.lastCacheUpdate = null;
     }
 
     /**
      * Salva dados com tratamento de erro
+     * @param {string} key - Chave de armazenamento
+     * @param {*} data - Dados a salvar
      */
     async saveData(key, data) {
         try {
@@ -95,6 +86,8 @@ class UserDataService {
 
     /**
      * Carrega dados com tratamento de erro e valor padrão
+     * @param {string} key - Chave de armazenamento
+     * @param {*} defaultValue - Valor padrão se não existir
      */
     async loadData(key, defaultValue = null) {
         try {
@@ -112,7 +105,18 @@ class UserDataService {
     // ==================== PERFIL DO USUÁRIO ====================
 
     async getProfile() {
-        return await this.loadData(STORAGE_KEYS.USER_PROFILE, DEFAULT_PROFILE);
+        // Tenta usar cache
+        if (this._cache.profile && this._isCacheValid()) {
+            return this._cache.profile;
+        }
+
+        const profile = await this.loadData(STORAGE_KEYS.USER_PROFILE, DEFAULT_PROFILE);
+
+        // Atualiza cache
+        this._cache.profile = profile;
+        this._cache.lastCacheUpdate = Date.now();
+
+        return profile;
     }
 
     async saveProfile(profile) {
@@ -122,7 +126,18 @@ class UserDataService {
             ...profile,
             updatedAt: new Date().toISOString(),
         };
-        return await this.saveData(STORAGE_KEYS.USER_PROFILE, updatedProfile);
+
+        // Invalida cache
+        this._cache.profile = updatedProfile;
+
+        const result = await this.saveData(STORAGE_KEYS.USER_PROFILE, updatedProfile);
+
+        // Sincroniza com Firebase se disponível
+        if (result.success) {
+            firebaseService.saveUserProfile(updatedProfile);
+        }
+
+        return result;
     }
 
     async updateProfile(data) {
@@ -133,15 +148,20 @@ class UserDataService {
         try {
             return await AsyncStorage.getItem(STORAGE_KEYS.API_KEY);
         } catch (error) {
+            console.error('Erro ao obter API key:', error);
             return null;
         }
     }
 
     async saveApiKey(key) {
         try {
-            await AsyncStorage.setItem(STORAGE_KEYS.API_KEY, key);
+            if (!key || typeof key !== 'string') {
+                return false;
+            }
+            await AsyncStorage.setItem(STORAGE_KEYS.API_KEY, key.trim());
             return true;
         } catch (error) {
+            console.error('Erro ao salvar API key:', error);
             return false;
         }
     }
@@ -162,18 +182,21 @@ class UserDataService {
     }
 
     async addInsight(insight) {
+        if (!insight || typeof insight !== 'string') {
+            return { success: false, error: 'Insight inválido' };
+        }
+
         const profile = await this.getProfile();
         const insights = profile.insights || [];
 
-        // Add new insight with timestamp
         insights.push({
-            text: insight,
+            text: insight.trim(),
             timestamp: new Date().toISOString()
         });
 
-        // Keep last 10 insights to avoid bloating the prompt
+        // Mantém apenas os últimos N insights
         return await this.saveProfile({
-            insights: insights.slice(-10),
+            insights: insights.slice(-LIMITS.MAX_INSIGHTS),
             lastSummaryAt: new Date().toISOString()
         });
     }
@@ -181,36 +204,16 @@ class UserDataService {
     // ==================== CONTATOS DE EMERGÊNCIA ====================
 
     async getEmergencyContacts() {
-        const defaultContacts = [
-            {
-                id: 'cvv',
-                name: 'CVV - Centro de Valorização da Vida',
-                phone: '188',
-                type: 'emergency',
-                description: 'Apoio emocional 24 horas',
-                icon: 'heart',
-                color: '#E74C3C',
-                isPermanent: true,
-            },
-            {
-                id: 'samu',
-                name: 'SAMU',
-                phone: '192',
-                type: 'emergency',
-                description: 'Serviço de Atendimento Móvel de Urgência',
-                icon: 'medical',
-                color: '#3498DB',
-                isPermanent: true,
-            },
-        ];
-
         const savedContacts = await this.loadData(STORAGE_KEYS.EMERGENCY_CONTACTS, []);
-
         // Sempre inclui os contatos permanentes
-        return [...defaultContacts, ...savedContacts.filter(c => !c.isPermanent)];
+        return [...PERMANENT_CONTACTS, ...savedContacts.filter(c => !c.isPermanent)];
     }
 
     async addEmergencyContact(contact) {
+        if (!contact || !contact.name || !contact.phone) {
+            return { success: false, error: 'Contato inválido' };
+        }
+
         const contacts = await this.loadData(STORAGE_KEYS.EMERGENCY_CONTACTS, []);
         const newContact = {
             id: `contact_${Date.now()}`,
@@ -230,27 +233,29 @@ class UserDataService {
 
     // ==================== HISTÓRICO DE HUMOR ====================
 
-    async getMoodHistory(limit = 30) {
+    async getMoodHistory(limit = LIMITS.MOOD_HISTORY_LOAD) {
         const history = await this.loadData(STORAGE_KEYS.MOOD_HISTORY, []);
         return history.slice(-limit);
     }
 
     async addMoodEntry(mood, note = '') {
+        if (!mood) {
+            return { success: false, error: 'Humor inválido' };
+        }
+
         const history = await this.loadData(STORAGE_KEYS.MOOD_HISTORY, []);
         const entry = {
             id: `mood_${Date.now()}`,
             mood,
-            note,
+            note: note ? note.substring(0, 200) : '', // Limita tamanho da nota
             timestamp: new Date().toISOString(),
         };
         history.push(entry);
 
-        // Mantém apenas os últimos 90 dias
-        const ninetyDaysAgo = new Date();
-        ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-        const filtered = history.filter(
-            e => new Date(e.timestamp) > ninetyDaysAgo
-        );
+        // Mantém apenas os últimos N dias
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - LIMITS.MAX_MOOD_HISTORY_DAYS);
+        const filtered = history.filter(e => new Date(e.timestamp) > cutoffDate);
 
         return await this.saveData(STORAGE_KEYS.MOOD_HISTORY, filtered);
     }
@@ -258,14 +263,12 @@ class UserDataService {
     async getTodaysMood() {
         const history = await this.getMoodHistory();
         const today = new Date().toDateString();
-        return history.find(
-            e => new Date(e.timestamp).toDateString() === today
-        );
+        return history.find(e => new Date(e.timestamp).toDateString() === today);
     }
 
     // ==================== HISTÓRICO DE CHAT ====================
 
-    async getChatHistory(limit = 100) {
+    async getChatHistory(limit = LIMITS.CHAT_HISTORY_LOAD) {
         const history = await this.loadData(STORAGE_KEYS.CHAT_HISTORY, []);
         return history.slice(-limit);
     }
@@ -273,7 +276,11 @@ class UserDataService {
     async addChatMessage(message, isUser = true) {
         const settings = await this.getSettings();
         if (!settings.privacy.saveHistory) {
-            return { success: true }; // Não salva se desabilitado
+            return { success: true };
+        }
+
+        if (!message || typeof message !== 'string') {
+            return { success: false, error: 'Mensagem inválida' };
         }
 
         const history = await this.loadData(STORAGE_KEYS.CHAT_HISTORY, []);
@@ -285,10 +292,17 @@ class UserDataService {
         };
         history.push(entry);
 
-        // Mantém apenas as últimas 500 mensagens
-        const limited = history.slice(-500);
+        // Mantém apenas as últimas N mensagens
+        const limited = history.slice(-LIMITS.MAX_CHAT_HISTORY);
 
-        return await this.saveData(STORAGE_KEYS.CHAT_HISTORY, limited);
+        const result = await this.saveData(STORAGE_KEYS.CHAT_HISTORY, limited);
+
+        // Sincroniza com Firebase
+        if (result.success) {
+            firebaseService.syncChatMessage(entry);
+        }
+
+        return result;
     }
 
     async clearChatHistory() {
@@ -298,7 +312,17 @@ class UserDataService {
     // ==================== CONFIGURAÇÕES ====================
 
     async getSettings() {
-        return await this.loadData(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS);
+        // Tenta usar cache
+        if (this._cache.settings && this._isCacheValid()) {
+            return this._cache.settings;
+        }
+
+        const settings = await this.loadData(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS);
+
+        // Atualiza cache
+        this._cache.settings = settings;
+
+        return settings;
     }
 
     async saveSettings(settings) {
@@ -307,6 +331,10 @@ class UserDataService {
             ...currentSettings,
             ...settings,
         };
+
+        // Atualiza cache
+        this._cache.settings = updatedSettings;
+
         return await this.saveData(STORAGE_KEYS.SETTINGS, updatedSettings);
     }
 
@@ -327,6 +355,7 @@ class UserDataService {
         try {
             const keys = Object.values(STORAGE_KEYS);
             await AsyncStorage.multiRemove(keys);
+            this._invalidateCache();
             return { success: true };
         } catch (error) {
             console.error('Erro ao limpar dados:', error);
@@ -339,7 +368,7 @@ class UserDataService {
             const data = {
                 profile: await this.getProfile(),
                 contacts: await this.getEmergencyContacts(),
-                moodHistory: await this.getMoodHistory(90),
+                moodHistory: await this.getMoodHistory(LIMITS.MAX_MOOD_HISTORY_DAYS),
                 settings: await this.getSettings(),
                 exportedAt: new Date().toISOString(),
             };

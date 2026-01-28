@@ -315,7 +315,6 @@ export default function HomeScreen({ navigation }) {
                 <MoodCard />
 
                 {/* Ações rápidas */}
-                <Text style={styles.sectionTitle}>O que você gostaria de fazer?</Text>
                 <View style={styles.quickActionsGrid}>
                     <QuickActionCard
                         image={require('../../assets/chat.png')}
@@ -325,20 +324,6 @@ export default function HomeScreen({ navigation }) {
                         onPress={() => navigation.navigate('Chat')}
                     />
                     <QuickActionCard
-                        image={require('../../assets/relax.png')}
-                        title="Relaxar"
-                        subtitle="Exercícios"
-                        color={themeColors.accent.hope}
-                        onPress={() => navigation.navigate('Chat', { startWith: 'relaxar' })}
-                    />
-                    <QuickActionCard
-                        image={require('../../assets/vent.png')}
-                        title="Desabafar"
-                        subtitle="Estou ouvindo"
-                        color={themeColors.accent.warm}
-                        onPress={() => navigation.navigate('Chat', { startWith: 'desabafar' })}
-                    />
-                    <QuickActionCard
                         image={require('../../assets/emergency.png')}
                         title="Emergência"
                         subtitle="Ajuda agora"
@@ -346,9 +331,6 @@ export default function HomeScreen({ navigation }) {
                         onPress={() => navigation.navigate('Emergency')}
                     />
                 </View>
-
-                {/* Encontre um profissional */}
-                <Text style={styles.sectionTitle}>Encontre um profissional</Text>
                 <View style={styles.quickActionsGrid}>
                     <QuickActionCard
                         image={require('../../assets/professional.png')}
