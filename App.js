@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,6 +23,9 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import SupportScreen from './src/screens/SupportScreen';
 import LoginScreen from './src/screens/LoginScreen';
+import DocumentationScreen from './src/screens/DocumentationScreen';
+import VideoCallScreen from './src/screens/VideoCallScreen';
+import CalendarScreen from './src/screens/CalendarScreen';
 
 // Sistema de cores e tema
 import { colors } from './src/styles/theme';
@@ -31,6 +35,7 @@ import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 SplashScreen.preventAutoHideAsync();
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 function MainTabs() {
     const { isDark, themeColors } = useTheme();
@@ -46,6 +51,8 @@ function MainTabs() {
                         iconName = focused ? 'home' : 'home-outline';
                     } else if (route.name === 'Chat') {
                         iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
+                    } else if (route.name === 'Calendar') {
+                        iconName = focused ? 'calendar' : 'calendar-outline';
                     } else if (route.name === 'Emergency') {
                         iconName = focused ? 'call' : 'call-outline';
                     } else if (route.name === 'Registration') {
@@ -75,11 +82,22 @@ function MainTabs() {
         >
             <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Início' }} />
             <Tab.Screen name="Chat" component={ChatScreen} options={{ title: 'Conversa' }} />
+            <Tab.Screen name="Calendar" component={CalendarScreen} options={{ title: 'Calendário' }} />
             <Tab.Screen name="Emergency" component={EmergencyScreen} options={{ title: 'Ajuda' }} />
             <Tab.Screen name="Registration" component={RegistrationScreen} options={{ title: 'Cadastro' }} />
             <Tab.Screen name="Support" component={SupportScreen} options={{ title: 'Suporte' }} />
             <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: 'Ajustes' }} />
         </Tab.Navigator>
+    );
+}
+
+function RootNavigator() {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="MainTabs" component={MainTabs} />
+            <Stack.Screen name="Documentation" component={DocumentationScreen} />
+            <Stack.Screen name="VideoCall" component={VideoCallScreen} />
+        </Stack.Navigator>
     );
 }
 
@@ -133,7 +151,8 @@ function AppContent() {
     return (
         <>
             <StatusBar style={isDark ? 'light' : 'dark'} />
-            <MainTabs />
+            <RootNavigator />
         </>
     );
 }
+

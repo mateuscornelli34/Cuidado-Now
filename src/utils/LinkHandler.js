@@ -59,6 +59,37 @@ class LinkHandler {
     }
 
     /**
+     * Abre qualquer URL externa
+     * @param {string} url - URL para abrir
+     */
+    async openUrl(url) {
+        try {
+            // Na web, abrir em nova aba
+            if (Platform.OS === 'web') {
+                window.open(url, '_blank');
+                return;
+            }
+
+            // No mobile, usa Linking
+            const canOpen = await Linking.canOpenURL(url);
+            if (canOpen) {
+                await Linking.openURL(url);
+            } else {
+                // Fallback: tenta abrir mesmo assim
+                await Linking.openURL(url);
+            }
+        } catch (error) {
+            console.error('Erro ao abrir URL:', error);
+            // Alerta cross-platform
+            if (Platform.OS === 'web') {
+                window.alert('Erro: Não foi possível abrir o link.');
+            } else {
+                Alert.alert('Erro', 'Não foi possível abrir o link.');
+            }
+        }
+    }
+
+    /**
      * Retorna o link de acesso ao app (Deep Link)
      */
     getAppDeepLink() {
