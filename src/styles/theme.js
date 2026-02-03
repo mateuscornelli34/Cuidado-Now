@@ -5,71 +5,72 @@
  */
 
 export const colors = {
-    // Cores primárias - tons calmantes e tranquilizadores
+    // Professional & Clinical Blue Palette
     primary: {
-        main: '#4A90A4',
-        light: '#7BB8C9',
-        dark: '#2D6A7F',
-        gradient: ['#4A90A4', '#7BB8C9'],
+        main: '#0052CC', // Trusted Blue
+        light: '#4C9AFF', // Soft Blue
+        dark: '#172B4D', // Deep Navy
+        gradient: ['#0052CC', '#2684FF'],
     },
 
-    // Cores de destaque e acentuação
+    // Acentuação com foco em calma e confiança
     accent: {
-        warm: '#E8B89D',
-        soft: '#B8D4E3',
-        hope: '#98D4BB',
+        warm: '#FFBDAE', // Soft Peach
+        soft: '#EAE6FF', // Lavender
+        hope: '#36B37E', // Success Green
+        info: '#6554C0', // Purple for deeper actions
     },
 
-    // Cores de humor (para feedback visual)
+    // Feedback visual (Cores de status profissional)
     mood: {
-        great: '#7ED399',
-        good: '#98D4BB',
-        okay: '#E8C87D',
-        low: '#E8A87D',
-        struggling: '#D4868C',
+        great: '#36B37E', // Green
+        good: '#79F2C0', // Light Green
+        okay: '#FFAB00', // Amber
+        low: '#FF8B00', // Orange
+        struggling: '#BF2600', // Red
     },
 
-    // Tema claro
+    // Tema claro (Clean & Medical)
     light: {
-        background: '#F7F9FC',
-        surface: '#FFFFFF',
-        surfaceVariant: '#F0F4F8',
+        background: '#FAFBFC', // Very light gray, almost white
+        surface: '#FFFFFF', // Pure white
+        surfaceVariant: '#EBECF0', // Light gray for inputs/secondary
         text: {
-            primary: '#2C3E50',
-            secondary: '#5D6D7E',
-            muted: '#95A5A6',
+            primary: '#172B4D', // Dark Navy for readable text
+            secondary: '#505F79', // Slate gray
+            muted: '#97A0AF', // Muted gray
             inverse: '#FFFFFF',
         },
-        border: '#E1E8ED',
-        shadow: 'rgba(0, 0, 0, 0.08)',
+        border: '#DFE1E6', // Subtle border
+        shadow: 'rgba(9, 30, 66, 0.15)', // Professional shadow
     },
 
-    // Tema escuro
+    // Tema escuro (Sleek & Focused)
     dark: {
-        background: '#1A2634',
-        surface: '#243447',
-        surfaceVariant: '#2D4156',
+        background: '#091E42', // Deep Navy Background
+        surface: '#172B4D', // Darker Surface
+        surfaceVariant: '#253858', // Input variant
         text: {
-            primary: '#ECF0F1',
-            secondary: '#B4BEC9',
-            muted: '#7F8C8D',
-            inverse: '#1A2634',
+            primary: '#EBECF0', // Light gray
+            secondary: '#B3BAC5', // Soft gray
+            muted: '#7A869A', // Muted
+            inverse: '#091E42',
         },
-        border: '#3D5269',
-        shadow: 'rgba(0, 0, 0, 0.3)',
+        border: '#42526E', // Dark border
+        shadow: 'rgba(0, 0, 0, 0.5)',
     },
 
-    // Estados
-    error: '#E74C3C',
-    warning: '#F39C12',
-    success: '#27AE60',
-    info: '#3498DB',
+    // Estados universais
+    error: '#DE350B',
+    warning: '#FF991F',
+    success: '#36B37E',
+    info: '#0065FF',
 
-    // Emergência
+    // Emergência (Distinct & Clear)
     emergency: {
-        background: '#FFF5F5',
-        border: '#E74C3C',
-        text: '#C0392B',
+        background: '#FFEBE6',
+        border: '#FF5630',
+        text: '#BF2600',
     },
 };
 
