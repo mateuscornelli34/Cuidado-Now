@@ -40,3 +40,9 @@ Desktop.ini
 *.key
 *.mobileprovision
 *.orig.*
+.claude/settings.local.json
+.gitignore
+ICON_SYSTEM_REVIEW.md
+.gitignore
+CLAUDE.md
+assets/.backup*
